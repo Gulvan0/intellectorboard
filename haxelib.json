@@ -1,0 +1,12 @@
+{
+    "name": "intellectorboard",
+    "url": "",
+    "license": "MIT",
+    "version": "0.1.0",
+    "classPath": "src/",
+    "description": "Core Intellector board logic: piece/hex primitives, movement rules, position, ply application and ply tree.",
+    "contributors": [],
+    "dependencies": {
+        "morestd": ""
+    }
+}
