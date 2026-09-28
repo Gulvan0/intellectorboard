@@ -46,65 +46,51 @@ class HexCoordsNavigation
         return result;
     }
 
+    /*
+        A lateral step's j-shift depends on the CURRENT column's parity, which flips every step, so
+        it isn't just `steps` times one step's shift - it sums to ceil(steps/2) or floor(steps/2)
+        depending on starting parity, i.e. (steps + startsOnShiftingParity) / 2. Radial (Agr*) steps
+        alternate 2,1,2,1,... the same way, summing to 3*floor(steps/2) plus one more term if odd.
+    */
     public static function step(coords:HexCoords, dir:Direction, ?steps:Int = 1):HexCoords
     {
         switch dir
         {
             case Up:
                 return new HexCoords(coords.i, coords.j - steps);
-            case UpLeft:
-                var jShift:Int = Math.floor(steps / 2);
-                if (coords.i % 2 == 0)
-                    jShift--;
-                return new HexCoords(coords.i - steps, coords.j - jShift);
-            case UpRight:
-                var jShift:Int = Math.floor(steps / 2);
-                if (coords.i % 2 == 0)
-                    jShift--;
-                return new HexCoords(coords.i + steps, coords.j - jShift);
             case Down:
                 return new HexCoords(coords.i, coords.j + steps);
+            case UpLeft:
+                var jShift:Int = Std.int((steps + (coords.i % 2 == 0 ? 1 : 0)) / 2);
+                return new HexCoords(coords.i - steps, coords.j - jShift);
+            case UpRight:
+                var jShift:Int = Std.int((steps + (coords.i % 2 == 0 ? 1 : 0)) / 2);
+                return new HexCoords(coords.i + steps, coords.j - jShift);
             case DownLeft:
-                var jShift:Int = Math.floor(steps / 2);
-                if (coords.i % 2 == 1)
-                    jShift++;
+                var jShift:Int = Std.int((steps + (coords.i % 2 == 1 ? 1 : 0)) / 2);
                 return new HexCoords(coords.i - steps, coords.j + jShift);
             case DownRight:
-                var jShift:Int = Math.floor(steps / 2);
-                if (coords.i % 2 == 1)
-                    jShift++;
+                var jShift:Int = Std.int((steps + (coords.i % 2 == 1 ? 1 : 0)) / 2);
                 return new HexCoords(coords.i + steps, coords.j + jShift);
             case AgrUpLeft:
-                var jShift:Int = 3 * Math.floor(steps / 2);
+                var jShift:Int = 3 * Std.int(steps / 2);
                 if (steps % 2 == 1)
-                    if (coords.i % 2 == 0)
-                        jShift += 2;
-                    else
-                        jShift += 1;
+                    jShift += coords.i % 2 == 0 ? 2 : 1;
                 return new HexCoords(coords.i - steps, coords.j - jShift);
             case AgrUpRight:
-                var jShift:Int = 3 * Math.floor(steps / 2);
+                var jShift:Int = 3 * Std.int(steps / 2);
                 if (steps % 2 == 1)
-                    if (coords.i % 2 == 0)
-                        jShift += 2;
-                    else
-                        jShift += 1;
+                    jShift += coords.i % 2 == 0 ? 2 : 1;
                 return new HexCoords(coords.i + steps, coords.j - jShift);
             case AgrDownLeft:
-                var jShift:Int = 3 * Math.floor(steps / 2);
+                var jShift:Int = 3 * Std.int(steps / 2);
                 if (steps % 2 == 1)
-                    if (coords.i % 2 == 1)
-                        jShift += 2;
-                    else
-                        jShift += 1;
+                    jShift += coords.i % 2 == 1 ? 2 : 1;
                 return new HexCoords(coords.i - steps, coords.j + jShift);
             case AgrDownRight:
-                var jShift:Int = 3 * Math.floor(steps / 2);
+                var jShift:Int = 3 * Std.int(steps / 2);
                 if (steps % 2 == 1)
-                    if (coords.i % 2 == 1)
-                        jShift += 2;
-                    else
-                        jShift += 1;
+                    jShift += coords.i % 2 == 1 ? 2 : 1;
                 return new HexCoords(coords.i + steps, coords.j + jShift);
             case AgrLeft:
                 return new HexCoords(coords.i - 2 * steps, coords.j);
