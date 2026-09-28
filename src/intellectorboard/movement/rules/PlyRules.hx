@@ -51,7 +51,7 @@ class PlyRules
                 plys.push(RawPly.construct(hex.coords, destination, null));
 
                 var capturedPiece:Null<PieceData> = position.get(destination).piece();
-                if (CoreRules.isChameleonEligible(position.pieces, hex.coords, hex.piece, capturedPiece))
+                if (CoreRules.isChameleonEligible(hex.piece, hex.coords, capturedPiece, position.pieces))
                     plys.push(RawPly.construct(hex.coords, destination, capturedPiece.type));
             }
         }

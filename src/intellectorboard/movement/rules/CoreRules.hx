@@ -49,9 +49,11 @@ class CoreRules
 
     /**
         Whether `movingPiece` capturing `capturedPiece` at `from`'s aura may "chameleon" - morph
-        into the captured piece's own kind instead of keeping its own.
+        into the captured piece's own kind instead of keeping its own. `capturedPiece` is
+        genuinely nullable - "is there anything here to chameleon into" is part of the question,
+        not a precondition the caller must already have ruled out.
     **/
-    public static function isChameleonEligible(pieces:PieceArrangement, from:HexCoords, movingPiece:PieceData, capturedPiece:Null<PieceData>):Bool
+    public static function isChameleonEligible(movingPiece:PieceData, from:HexCoords, capturedPiece:Null<PieceData>, pieces:PieceArrangement):Bool
     {
         return capturedPiece != null
             && capturedPiece.color != movingPiece.color
