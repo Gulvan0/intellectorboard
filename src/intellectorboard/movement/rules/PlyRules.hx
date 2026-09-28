@@ -41,7 +41,7 @@ class PlyRules
 
             for (destination in MoveDestinations.getPossibleDestinations(hex.coords, position.pieces, true))
             {
-                if (hex.piece.type == Progressor && destination.isFinal(hex.piece.color))
+                if (CoreRules.isPromotionEligible(hex.piece, destination))
                 {
                     for (newType in CoreRules.POSSIBLE_PROMOTION_OPTIONS)
                         plys.push(RawPly.construct(hex.coords, destination, newType));
@@ -51,12 +51,7 @@ class PlyRules
                 plys.push(RawPly.construct(hex.coords, destination, null));
 
                 var capturedPiece:Null<PieceData> = position.get(destination).piece();
-                if (
-                    CoreRules.isHexAffectedByAura(position.pieces, hex.coords)
-                    && capturedPiece?.color != hex.piece.color
-                    && capturedPiece?.type != Intellector
-                    && capturedPiece?.type != hex.piece.type
-                )
+                if (CoreRules.isChameleonEligible(position.pieces, hex.coords, hex.piece, capturedPiece))
                     plys.push(RawPly.construct(hex.coords, destination, capturedPiece.type));
             }
         }

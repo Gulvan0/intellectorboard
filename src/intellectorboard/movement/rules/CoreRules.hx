@@ -35,4 +35,28 @@ class CoreRules
 
         return false;
     }
+
+    /**
+        Whether `movingPiece` reaching `destination` is a Progressor promotion, needing one of
+        `POSSIBLE_PROMOTION_OPTIONS` chosen before the ply is complete. Doesn't consider what's
+        on `destination` - capturing the enemy Intellector there is still Fatum, a separate
+        outcome `PlyPerformer`/`MaterializedPly.isFatum` handle independently of `morphInto`.
+    **/
+    public static function isPromotionEligible(movingPiece:PieceData, destination:HexCoords):Bool
+    {
+        return movingPiece.type == Progressor && destination.isFinal(movingPiece.color);
+    }
+
+    /**
+        Whether `movingPiece` capturing `capturedPiece` at `from`'s aura may "chameleon" - morph
+        into the captured piece's own kind instead of keeping its own.
+    **/
+    public static function isChameleonEligible(pieces:PieceArrangement, from:HexCoords, movingPiece:PieceData, capturedPiece:Null<PieceData>):Bool
+    {
+        return capturedPiece != null
+            && capturedPiece.color != movingPiece.color
+            && capturedPiece.type != Intellector
+            && capturedPiece.type != movingPiece.type
+            && isHexAffectedByAura(pieces, from);
+    }
 }
