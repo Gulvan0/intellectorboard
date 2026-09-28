@@ -30,17 +30,19 @@ class CoreRules
             return false;
 
         for (nearbyCoords in HexCoordsNavigation.lateralSurroundings(coords))
-            if (pieces.pieceAt(nearbyCoords).equals(new PieceData(Intellector, piece.color)))
+        {
+            var nearbyPiece:Null<PieceData> = pieces.pieceAt(nearbyCoords);
+            if (nearbyPiece != null && nearbyPiece.equals(new PieceData(Intellector, piece.color)))
                 return true;
+        }
 
         return false;
     }
 
     /**
-        Whether `movingPiece` reaching `destination` is a Progressor promotion, needing one of
-        `POSSIBLE_PROMOTION_OPTIONS` chosen before the ply is complete. Doesn't consider what's
-        on `destination` - capturing the enemy Intellector there is still Fatum, a separate
-        outcome `PlyPerformer`/`MaterializedPly.isFatum` handle independently of `morphInto`.
+        Whether `movingPiece` reaching `destination` is a Progressor promotion. Ignores what's on
+        `destination` - capturing the enemy Intellector there is Fatum, handled separately by
+        `PlyPerformer`/`MaterializedPly.isFatum`.
     **/
     public static function isPromotionEligible(movingPiece:PieceData, destination:HexCoords):Bool
     {
@@ -48,10 +50,9 @@ class CoreRules
     }
 
     /**
-        Whether `movingPiece` capturing `capturedPiece` at `from`'s aura may "chameleon" - morph
-        into the captured piece's own kind instead of keeping its own. `capturedPiece` is
-        genuinely nullable - "is there anything here to chameleon into" is part of the question,
-        not a precondition the caller must already have ruled out.
+        Whether `movingPiece` capturing `capturedPiece` near a friendly Intellector may
+        "chameleon" into the captured piece's kind. `capturedPiece` nullable = no capture, not an
+        already-ruled-out precondition.
     **/
     public static function isChameleonEligible(movingPiece:PieceData, from:HexCoords, capturedPiece:Null<PieceData>, pieces:PieceArrangement):Bool
     {

@@ -25,7 +25,10 @@ class PlyRules
             return CoreRules.POSSIBLE_PROMOTION_OPTIONS.contains(ply.morphInto);
 
         if (CoreRules.isHexAffectedByAura(position.pieces, ply.from))  // 2. Aura case
-            return position.pieces.pieceAt(ply.to).equals(new PieceData(ply.morphInto, movingPiece.color.opposite()));
+        {
+            var targetPiece:Null<PieceData> = position.pieces.pieceAt(ply.to);
+            return targetPiece != null && targetPiece.equals(new PieceData(ply.morphInto, movingPiece.color.opposite()));
+        }
 
         return false;  // No other ways to morph exist
     }
