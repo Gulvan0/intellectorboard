@@ -1,5 +1,7 @@
 package intellectorboard.movement;
 
+import intellectorboard.primitives.piece.PieceColor;
+
 class DirectionGroups
 {
     public static function allLateral():Array<Direction>

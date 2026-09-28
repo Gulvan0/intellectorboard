@@ -5,6 +5,7 @@ import intellectorboard.primitives.piece.PieceKind;
 import intellectorboard.primitives.hex.HexCoords;
 import intellectorboard.primitives.piece.PieceColor;
 import intellectorboard.primitives.hex.Hex;
+import intellectorboard.mappers.PieceKindFormatter;
 
 class Position
 {
@@ -90,7 +91,7 @@ class Position
 
     public function isDefaultStarting():Bool
     {
-        return getHash() == defaultStartingHash;
+        return getHash() == DEFAULT_STARTING_POSITION_HASH;
     }
 
     public function getHash():String
@@ -100,7 +101,7 @@ class Position
         for (hexData in new OccupiedHexesIterator(this))
         {
             hash += hexData.scalarCoord;
-            hash += pieceLetter(hexData.piece.type);
+            hash += PieceKindFormatter.toLetter(hexData.piece.type);
             if (hexData.piece.color == Black)
                 hash += "!";
         }

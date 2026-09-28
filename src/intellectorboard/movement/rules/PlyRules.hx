@@ -10,7 +10,7 @@ class PlyRules
 {
     public static function isPlyPossible(ply:RawPly, position:Position):Bool
     {
-        var movingPiece:Null<PieceData> = situation.pieces.get(ply.from).piece();
+        var movingPiece:Null<PieceData> = position.pieces.get(ply.from).piece();
 
         if (movingPiece == null || movingPiece.color != position.turnColor)
             return false;  // You have to move your piece
@@ -41,10 +41,10 @@ class PlyRules
 
             for (destination in MoveDestinations.getPossibleDestinations(hex.coords, position.pieces, true))
             {
-                if (piece.type == Progressor && destination.isFinal(piece.color))
+                if (hex.piece.type == Progressor && destination.isFinal(hex.piece.color))
                 {
                     for (newType in CoreRules.POSSIBLE_PROMOTION_OPTIONS)
-                        plys.push(RawPly.construct(hex.coords, destination, newType))
+                        plys.push(RawPly.construct(hex.coords, destination, newType));
                     continue;
                 }
 
@@ -57,7 +57,7 @@ class PlyRules
                     && capturedPiece?.type != Intellector
                     && capturedPiece?.type != hex.piece.type
                 )
-                    plys.push(RawPly.construct(hex.coords, destination, pieceOnDestination.type));
+                    plys.push(RawPly.construct(hex.coords, destination, capturedPiece.type));
             }
         }
 

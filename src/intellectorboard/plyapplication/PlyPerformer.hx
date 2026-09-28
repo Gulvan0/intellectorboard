@@ -21,16 +21,16 @@ class PlyPerformer
         {
             case NormalMove(from, to, movingPiece):
                 position.set(from, Empty);
-                position.setPiece(to, movingPiece, turnColor);
+                position.setPiece(to, movingPiece, position.turnColor);
             case NormalCapture(from, to, capturingPiece, _):
                 position.set(from, Empty);
-                position.setPiece(to, capturingPiece, turnColor);
+                position.setPiece(to, capturingPiece, position.turnColor);
             case ChameleonCapture(from, to, _, capturedPiece):
                 position.set(from, Empty);
-                position.setPiece(to, capturedPiece, turnColor);
+                position.setPiece(to, capturedPiece, position.turnColor);
             case Promotion(from, to, promotedTo), PromotionWithCapture(from, to, _, promotedTo):
                 position.set(from, Empty);
-                position.setPiece(to, promotedTo, turnColor);
+                position.setPiece(to, promotedTo, position.turnColor);
             case Castling(from, to):
                 position.swap(from, to);
         }
@@ -62,13 +62,13 @@ class PlyPerformer
                 position.set(from, position.get(to));
                 position.setPiece(to, capturedPiece, capturedPieceColor);
             case ChameleonCapture(from, to, capturingPiece, capturedPiece):
-                position.setPiece(from, capturingPiece, turnColor);
+                position.setPiece(from, capturingPiece, position.turnColor);
                 position.setPiece(to, capturedPiece, capturedPieceColor);
             case Promotion(from, to, _):
-                position.setPiece(from, Progressor, turnColor);
+                position.setPiece(from, Progressor, position.turnColor);
                 position.set(to, Empty);
             case PromotionWithCapture(from, to, capturedPiece, _):
-                position.setPiece(from, Progressor, turnColor);
+                position.setPiece(from, Progressor, position.turnColor);
                 position.setPiece(to, capturedPiece, capturedPieceColor);
             case Castling(from, to):
                 position.swap(from, to);
@@ -83,23 +83,23 @@ class PlyPerformer
     public static function performRandomPly(position:Position)
     {
         var allPlys:Array<RawPly> = PlyRules.possiblePlys(position);
-        var randomPly:Array<RawPly> = MathTools.randomElement(allPlys);
+        var randomPly:RawPly = MathTools.randomElement(allPlys);
         performRawPly(position, randomPly);
     }
 
-    public static function positionAfterPly(position:Position, ply:MaterializedPly):Situation
+    public static function positionAfterPly(position:Position, ply:MaterializedPly):Position
     {
         var newPosition:Position = position.copy();
         performPly(newPosition, ply);
         return newPosition;
     }
 
-    public static function positionAfterRawPly(position:Position, ply:RawPly):Situation
+    public static function positionAfterRawPly(position:Position, ply:RawPly):Position
     {
         return positionAfterPly(position, PlyMaterializer.materialize(ply, position.pieces));
     }
 
-    public static function randomPlay(position:Position, plyCount:Int, ?startingPosition:Null<Position>):Situation
+    public static function randomPlay(position:Position, plyCount:Int, ?startingPosition:Null<Position>):Position
     {
         var newPosition:Position = startingPosition ?? Position.defaultStarting();
         for (_ in 0...plyCount)

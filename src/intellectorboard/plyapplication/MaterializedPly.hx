@@ -64,9 +64,9 @@ class MaterializedPlyExtension
         return switch ply
         {
             case NormalMove(from, to, movingPiece):
-                movingPiece == Intellector && to.isFinal(turnColor);
+                movingPiece == Intellector && to.isFinal(position.turnColor);
             case Castling(from, to):
-                to.isFinal(turnColor);
+                to.isFinal(position.turnColor);
             default:
                 false;
         }
@@ -92,7 +92,7 @@ class MaterializedPlyExtension
 
     public static function toRaw(ply:MaterializedPly):RawPly
     {
-        return switch this
+        return switch ply
         {
             case NormalMove(from, to, _), NormalCapture(from, to, _, _), Castling(from, to):
                 RawPly.construct(from, to);

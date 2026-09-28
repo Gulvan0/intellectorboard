@@ -33,8 +33,13 @@ class OccupiedHexesIterator
 
     public function next():OccupiedHexData
     {
-        var returnedHex:PieceData = currentHex ?? retrieveNextHex();
+        var returnedHex:OccupiedHexData = currentHex ?? retrieveNextHex();
         currentHex = null;
         return returnedHex;
+    }
+
+    public function iterator():Iterator<OccupiedHexData>
+    {
+        return this;
     }
 }

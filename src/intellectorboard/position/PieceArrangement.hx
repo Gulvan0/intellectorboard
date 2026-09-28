@@ -1,6 +1,8 @@
 package intellectorboard.position;
 
 import intellectorboard.primitives.piece.PieceData;
+import intellectorboard.primitives.piece.PieceKind;
+import intellectorboard.primitives.piece.PieceColor;
 import haxe.ds.Vector;
 import intellectorboard.primitives.hex.Hex;
 import intellectorboard.primitives.hex.HexCoords;

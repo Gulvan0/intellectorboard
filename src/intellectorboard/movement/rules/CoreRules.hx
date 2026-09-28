@@ -26,7 +26,7 @@ class CoreRules
     public static function isHexAffectedByAura(pieces:PieceArrangement, coords:HexCoords):Bool
     {
         var piece:PieceData = pieces.pieceAt(coords);
-        if (piece == null || !AFFECTED_BY_AURA_PIECES.contains(piece.kind))
+        if (piece == null || !AFFECTED_BY_AURA_PIECES.contains(piece.type))
             return false;
 
         for (nearbyCoords in HexCoordsNavigation.lateralSurroundings(coords))

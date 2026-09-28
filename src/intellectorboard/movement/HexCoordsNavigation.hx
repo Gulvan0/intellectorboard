@@ -1,25 +1,26 @@
 package intellectorboard.movement;
 
 import intellectorboard.primitives.hex.HexCoords;
+import intellectorboard.primitives.piece.PieceColor;
 
 class HexCoordsNavigation
 {
-    public function isLiberatorJumpAway(coords:HexCoords, departure:HexCoords):Bool
+    public static function isLiberatorJumpAway(coords:HexCoords, departure:HexCoords):Bool
     {
         return isNStepsAway(coords, departure, DirectionGroups.allLateral(), 2);
     }
 
-    public function isLaterallyNear(coords:HexCoords, departure:HexCoords):Bool
+    public static function isLaterallyNear(coords:HexCoords, departure:HexCoords):Bool
     {
         return isNStepsAway(coords, departure, DirectionGroups.allLateral());
     }
 
-    public function isForwardStepAway(coords:HexCoords, departure:HexCoords, color:PieceColor):Bool
+    public static function isForwardStepAway(coords:HexCoords, departure:HexCoords, color:PieceColor):Bool
     {
         return isNStepsAway(coords, departure, DirectionGroups.forwardLateral(color));
     }
 
-    public function isNStepsAway(coords:HexCoords, departure:HexCoords, checkedDirections:Array<Direction>, ?n:Int = 1):Bool
+    public static function isNStepsAway(coords:HexCoords, departure:HexCoords, checkedDirections:Array<Direction>, ?n:Int = 1):Bool
     {
         for (dir in checkedDirections)
         {
@@ -31,7 +32,7 @@ class HexCoordsNavigation
         return false;
     }
 
-    public function lateralSurroundings(coords:HexCoords):Array<HexCoords>
+    public static function lateralSurroundings(coords:HexCoords):Array<HexCoords>
     {
         var result:Array<HexCoords> = [];
 
@@ -45,7 +46,7 @@ class HexCoordsNavigation
         return result;
     }
 
-    public function step(coords:HexCoords, dir:Direction, ?steps:Int = 1):HexCoords
+    public static function step(coords:HexCoords, dir:Direction, ?steps:Int = 1):HexCoords
     {
         switch dir
         {
@@ -54,7 +55,7 @@ class HexCoordsNavigation
             case UpLeft:
                 var jShift:Int = Math.floor(steps / 2);
                 if (coords.i % 2 == 0)
-                    j--;
+                    jShift--;
                 return new HexCoords(coords.i - steps, coords.j - jShift);
             case UpRight:
                 var jShift:Int = Math.floor(steps / 2);

@@ -1,6 +1,7 @@
 package intellectorboard.movement.rules;
 
 import intellectorboard.primitives.piece.PieceKind;
+import intellectorboard.primitives.piece.PieceColor;
 import intellectorboard.primitives.piece.PieceData;
 import intellectorboard.position.PieceArrangement;
 import intellectorboard.primitives.hex.HexCoords;
@@ -12,6 +13,7 @@ class MoveDestinations
 {
     private static function getJumpDestinations(departure:HexCoords, pieceArrangement:PieceArrangement, direction:Direction, distance:Int, captureAllowed:Bool = true):Array<HexCoords>
     {
+        var movingPiece:PieceData = pieceArrangement.get(departure).piece();
         var destination:HexCoords = HexCoordsNavigation.step(departure, direction, distance);
         if (!destination.isValid())
             return [];
@@ -19,13 +21,14 @@ class MoveDestinations
         var destinationHex:Hex = pieceArrangement.get(destination);
         var condition:Bool = captureAllowed? destinationHex.color() != movingPiece.color : destinationHex.match(Empty);
         if (condition)
-            return [destinationHex];
+            return [destination];
 
         return [];
     }
 
     private static function getSlideDestinations(departure:HexCoords, pieceArrangement:PieceArrangement, direction:Direction):Array<HexCoords>
     {
+        var movingPiece:PieceData = pieceArrangement.get(departure).piece();
         var possibleDestinations:Array<HexCoords> = [];
 
         var destination:HexCoords = departure;
@@ -52,6 +55,7 @@ class MoveDestinations
 
     private static function getSwapDestinations(departure:HexCoords, pieceArrangement:PieceArrangement, direction:Direction, partner:PieceKind):Array<HexCoords>
     {
+        var movingPiece:PieceData = pieceArrangement.get(departure).piece();
         var destination:HexCoords = HexCoordsNavigation.step(departure, direction);
         if (!destination.isValid())
             return [];
