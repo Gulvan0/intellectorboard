@@ -5,6 +5,8 @@ import intellectorboard.primitives.piece.PieceData;
 import intellectorboard.primitives.hex.HexCoords;
 import intellectorboard.primitives.hex.Hex;
 
+using Lambda;
+
 class PremoveDestinations
 {
     private static function getJumpDestinations(departure:HexCoords, direction:Direction, distance:Int):Array<HexCoords>
@@ -48,9 +50,9 @@ class PremoveDestinations
 
         var possibleDestinations:Array<HexCoords> = [];
 
-        for (pattern => directions in CoreRules.getAllowedMovements(piece))
+        for (pattern => directions in CoreRules.getAllowedMovements(movingPiece))
             for (dir in directions)
-                possibleDestinations = possibleDestinations.concat(getDestinationsForPatternAndDirection(departure, dir, pattern))
+                possibleDestinations = possibleDestinations.concat(getDestinationsForPatternAndDirection(departure, dir, pattern));
 
         return possibleDestinations;
     }
