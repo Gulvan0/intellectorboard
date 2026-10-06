@@ -47,7 +47,7 @@ abstract Sip(String) from String to String
                 if (pieceKind == null)
                     return null;
 
-                pieces.set(coords, Occupied(new PieceData(pieceKind, pieceColor)));
+                pieces.set(coords, Occupied(new PieceData(pieceKind, color)));
             }
 
         return new Position(pieces, turnColor);
@@ -79,9 +79,9 @@ abstract Sip(String) from String to String
             }
             var coordChar:String = String.fromCharCode(startingAsciiIndex + hex.scalarCoord % 26);
             var pieceChar:String = PieceKindFormatter.toLetter(hex.piece.type);
-            playerPiecesStr[hexData.piece.color] += coordChar + pieceChar;
+            arrangementStrings[hex.piece.color] += coordChar + pieceChar;
         }
 
-        return "2!" + PieceColorFormatter.toLetter(situation.turnColor) + arrangementStrings[White] + "!" + arrangementStrings[Black];
+        return "2!" + PieceColorFormatter.toLetter(position.turnColor) + arrangementStrings[White] + "!" + arrangementStrings[Black];
     }
 }
