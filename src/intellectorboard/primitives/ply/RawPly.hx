@@ -30,7 +30,7 @@ class RawPly
 
     public function equals(p:RawPly):Bool
     {
-        return this.from == p.from && this.to == p.to && this.morphInto == p.morphInto;
+        return HexCoords.areEqual(this.from, p.from) && HexCoords.areEqual(this.to, p.to) && this.morphInto == p.morphInto;
     }
 
     public function new()

@@ -19,8 +19,8 @@ class HexCoordsFormatter
 
     public static function getColumnLetter(i:Int, caps:Bool = false):String
     {
-        var startChar:String = caps? 'A' : 'a';
-        return String.fromCharCode(startChar.code + i);
+        var startCharCode:Int = caps? 'A'.code : 'a'.code;
+        return String.fromCharCode(startCharCode + i);
     }
 
     public static function getRowNumber(i:Int, j:Int):String

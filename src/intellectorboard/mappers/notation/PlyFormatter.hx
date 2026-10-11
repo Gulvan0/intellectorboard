@@ -6,6 +6,7 @@ import intellectorboard.movement.rules.PlyRules;
 import intellectorboard.position.OccupiedHexesIterator;
 import intellectorboard.primitives.piece.PieceColor;
 import intellectorboard.plyapplication.PlyMaterializer;
+import intellectorboard.plyapplication.PlyPerformer;
 import intellectorboard.plyapplication.MaterializedPly;
 import intellectorboard.primitives.piece.PieceData;
 import intellectorboard.position.Position;
@@ -30,7 +31,7 @@ class PlyFormatter
         }
     }
 
-    public static inline function pieceFromAbbreviation(abb:String):PieceKind
+    public static inline function pieceFromAbbreviation(abb:String):Null<PieceKind>
     {
         return switch abb
         {
@@ -107,12 +108,9 @@ class PlyFormatter
             throw "Failed to format ply: departure hex is empty";
 
         var prefix:String = indicateColor? colorSymbol(position.turnColor) : "";
-        var formattedPly:String = switch materializedPly
-        {
-            case Castling(from, to):
-                return formatCastling(from, to);
-            default:
-                return formatNonCastlingPly(ply, position, materializedPly, movingPiece);
+        var formattedPly:String = switch materializedPly {
+            case Castling(from, to): formatCastling(from, to);
+            default: formatNonCastlingPly(ply, position, materializedPly, movingPiece);
         }
 
         return prefix + formattedPly;
@@ -122,15 +120,15 @@ class PlyFormatter
     {
         if (plyStr.contains(":"))  // Castling case
         {
-            var splitted:String = plyStr.split(":");
-            var from:String = HexCoordsFormatter.fromNotation(splitted[0]);
-            var to:String = HexCoordsFormatter.fromNotation(splitted[1]);
+            var splitted:Array<String> = plyStr.split(":");
+            var from:HexCoords = HexCoordsFormatter.fromNotation(splitted[0]);
+            var to:HexCoords = HexCoordsFormatter.fromNotation(splitted[1]);
             return RawPly.construct(from, to);
         }
 
-        var movingPieceKind:PieceKind = pieceFromAbbreviation(plyStr.charAt(0));
+        var movingPieceKind:Null<PieceKind> = pieceFromAbbreviation(plyStr.charAt(0));
 
-        if (movingPiece == null)
+        if (movingPieceKind == null)
             movingPieceKind = Progressor;
         else
             plyStr = plyStr.substr(1);
@@ -145,7 +143,7 @@ class PlyFormatter
             plyStr = plyStr.substr(2);
 
             if (plyStr.charAt(0) == "=")
-                ply.morphInto = Notation.pieceFromAbbreviation(plyStr.charAt(1));
+                ply.morphInto = pieceFromAbbreviation(plyStr.charAt(1));
 
             return ply;
         }
@@ -173,12 +171,12 @@ class PlyFormatter
     public static function plySequenceToNotation(plys:Array<RawPly>, startingPosition:Position):Array<String>
     {
         var result:Array<String> = [];
-        var position:Position = startingPosition.copy();
+        var position:Position = startingPosition;
 
         for (ply in plys)
         {
             result.push(toNotation(ply, position));
-            position.performRawPly(ply);
+            position = PlyPerformer.positionAfterRawPly(position, ply);
         }
 
         return result;
