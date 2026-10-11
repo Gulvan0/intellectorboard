@@ -91,7 +91,7 @@ class Position
 
     public function isDefaultStarting():Bool
     {
-        return getHash() == DEFAULT_STARTING_POSITION_HASH;
+        return turnColor == White && getHash() == DEFAULT_STARTING_POSITION_HASH; // the hash covers the pieces only
     }
 
     public function getHash():String

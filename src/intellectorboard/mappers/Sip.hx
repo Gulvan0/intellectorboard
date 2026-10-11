@@ -12,6 +12,8 @@ import morestd.StringIterator;
 @:forward
 abstract Sip(String) from String to String
 {
+    public static final DEFAULT_STARTING_POSITION_SIP:Sip = fromPosition(Position.defaultStarting());
+
     public function new(sip:String)
     {
         this = sip;
