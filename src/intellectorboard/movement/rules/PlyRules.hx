@@ -33,6 +33,16 @@ class PlyRules
         return false;  // No other ways to morph exist
     }
 
+    /** Whether the side to move has at least one ply. Cheaper than `possiblePlys`, since it stops at the first one found **/
+    public static function hasPossiblePlys(position:Position):Bool
+    {
+        for (hex in new OccupiedHexesIterator(position))
+            if (hex.piece.color == position.turnColor && MoveDestinations.getPossibleDestinations(hex.coords, position.pieces, true).length > 0)
+                return true;
+
+        return false;
+    }
+
     public static function possiblePlys(position:Position):Array<RawPly>
     {
         var plys:Array<RawPly> = [];

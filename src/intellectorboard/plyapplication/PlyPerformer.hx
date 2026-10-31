@@ -41,6 +41,8 @@ class PlyPerformer
             return FatumReached;
         else if (isBreakthrough)
             return BreakthroughReached;
+        else if (!PlyRules.hasPossiblePlys(position))
+            return StalemateReached;
         else if (isProgressive)
             return ProgressivePlyPerformed(ply);
         else

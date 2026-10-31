@@ -6,5 +6,7 @@ enum PerformPlyResult
     ProgressivePlyPerformed(ply:MaterializedPly);
     FatumReached;
     BreakthroughReached;
+    /** The side to move has no plys left, which counts as their loss **/
+    StalemateReached;
     FailedToPerform;
 }
