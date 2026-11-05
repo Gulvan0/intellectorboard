@@ -35,7 +35,9 @@ abstract Sip(String) from String to String
     private static function parse(whitePart:String, blackPart:String, version:Int):Null<Position>
     {
         var pieces:PieceArrangement = PieceArrangement.empty();
-        var turnColor:PieceColor = PieceColorFormatter.fromLetter(whitePart.charAt(0));
+        var turnColor:Null<PieceColor> = PieceColorFormatter.fromLetter(whitePart.charAt(0));
+        if (turnColor == null)
+            return null;
 
         for (color => part in [White => whitePart, Black => blackPart])
             for (pieceChunk in new StringIterator(part, color == White? 1 : 0, 2))
@@ -55,14 +57,18 @@ abstract Sip(String) from String to String
         return new Position(pieces, turnColor);
     }
 
+    /** The position, or null if the SIP is malformed **/
     public function toPosition():Null<Position>
     {
         var parts:Array<String> = this.split("!");
 
-        var version:Int = 1;
+        var version:Null<Int> = 1;
         if (parts.length == 3)
             version = Std.parseInt(parts.shift());
         else if (parts.length != 2)
+            return null;
+
+        if (version != 1 && version != 2)
             return null;
 
         return parse(parts[0], parts[1], version);
