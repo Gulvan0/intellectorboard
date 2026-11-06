@@ -1,11 +1,14 @@
 {
     "name": "intellectorboard",
-    "url": "",
+    "url": "https://github.com/Gulvan0/intellectorboard",
     "license": "MIT",
     "version": "0.1.0",
     "classPath": "src/",
-    "description": "Core Intellector board logic: piece/hex primitives, movement rules, position, ply application and ply tree.",
-    "contributors": [],
+    "description": "Core Intellector board game logic: hex/piece/ply primitives, movement rules, positions, ply application and notation.",
+    "releasenote": "Initial release",
+    "contributors": [
+        "Gulvan"
+    ],
     "dependencies": {
         "morestd": ""
     }
